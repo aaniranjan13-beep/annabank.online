@@ -3,10 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+  schedule:
+    # Automatically runs every 24 hours at 03:00 UTC
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -32,6 +35,16 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Auto-sync bank limits and regulatory benchmarks
+        run: node scripts/update-bank-limits.js
+
+      - name: Commit auto-updated regulatory data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/metadata.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update bank limits and regulatory metrics [skip ci]" && git push)
 
       - name: Build production bundle
         run: npm run build

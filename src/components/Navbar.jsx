@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { exportToCSV, exportToJSON } from '../utils/exportUtils';
 
+import metadata from '../data/metadata.json';
+
 export default function Navbar({ 
   activeTab, 
   setActiveTab, 
@@ -39,6 +41,10 @@ export default function Navbar({
                 </span>
                 <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-blue-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">
                   {countriesCount ? `${countriesCount} Countries` : 'Worldwide'}
+                </span>
+                <span className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[10px] font-medium rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Auto-Sync Active ({metadata.lastUpdatedFormatted || 'Daily'})
                 </span>
               </div>
               <p className="text-xs text-slate-400 font-medium hidden sm:block">
